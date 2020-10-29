@@ -1,0 +1,101 @@
+body {
+  min-width: 100vw;
+}
+
+#intro {
+  position: relative;
+  top: 0;
+  height: 80vh;
+  background: blue;
+  opacity: 50%;
+  padding-left: 20%;
+  padding-right: 20%;
+  padding-top: 10%;
+  color: white;
+  font-size: 1.25em;
+}
+
+#hero {
+  height: 30vh;
+  background: black;
+  opacity: .8;
+  color: white;
+  text-align: center;
+  padding-top: 5vh;
+}
+
+h1 {
+  font-family: sans-serif;
+  text-align: center;
+  font-size: 5em;
+  color: white;
+  margin-top: 0;
+}
+
+#next-chunk {
+  position: relative;
+  height: 80vh;
+  background: blue;
+  opacity: 50%;
+  padding-left: 20%;
+  padding-right: 20%;
+  padding-top: 10%;
+  color: white;
+  font-size: 1.25em;
+}
+
+#scrolly {
+  position: relative;
+  height: 300vh;
+}
+
+#animation {
+  position: sticky;
+  position: -webkit-sticky;
+  top: 20vh;
+  margin-top: 5vh;
+  margin-bottom: 5vh;
+  height: 50vh;
+  width: 90vw;
+  margin-left: 5vw;
+  margin-right: 5vw;
+  background: #3D4849;
+  z-index: 0;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
+
+ h4 {
+  font-family: sans-serif;
+  text-align: center;
+  font-size: 2em;
+  color: white;
+}
+
+.text {
+  width: 40vw;
+  left: 30vw;
+  padding: 25px;
+  z-index: 1;
+  position: relative;
+  color: white;
+}
+
+#one {
+  background: teal;
+  margin-bottom: 50vh;
+  opacity: .9;
+}
+
+#two {
+  background: teal;
+  margin-bottom: 50vh;
+  opacity: .9;
+}
+
+#three {
+  background: teal;
+  opacity: .9;
+}
