@@ -40,3 +40,5 @@ Activate a target:
 let target = document.querySelector('#listItem');
 observer.observe(target);
 ```
+
+At this point, I had to start coding... the details of the interface weren't particularly enlightening as reading. So on to [building my first observer](./first-observer.md).
