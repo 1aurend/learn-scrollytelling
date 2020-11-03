@@ -3,8 +3,6 @@ body {
 }
 
 #intro {
-  position: relative;
-  top: 0;
   height: 80vh;
   background: blue;
   opacity: 50%;
@@ -33,7 +31,6 @@ h1 {
 }
 
 #next-chunk {
-  position: relative;
   height: 80vh;
   background: blue;
   opacity: 50%;
@@ -45,8 +42,11 @@ h1 {
 }
 
 #scrolly {
-  position: relative;
   height: 300vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
 }
 
 #animation {
@@ -64,7 +64,6 @@ h1 {
   display: flex;
   justify-content: center;
   flex-direction: column;
-  align-items: center;
 }
 
  h4 {
@@ -79,7 +78,6 @@ h1 {
   left: 30vw;
   padding: 25px;
   z-index: 1;
-  position: relative;
   color: white;
 }
 

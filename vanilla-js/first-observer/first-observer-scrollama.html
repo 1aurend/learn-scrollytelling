@@ -46,10 +46,17 @@
       </p>
     </section>
     <script>
+      const onEnter = (element, index, direction) => {
+
+      }
       const scroller = scrollama()
       scroller
         .setup({
-          step: ".step",
+          step: '.step',
+          offset: '0.2',
+          progress: true,
+          threshold: 50,
+          debug: true
         })
         .onStepEnter((response) => {
           // { element, index, direction }
@@ -57,6 +64,7 @@
         .onStepExit((response) => {
           // { element, index, direction }
         })
+      window.addEventListener('resize', scroller.resize)
 
 
       const handleScroll = (entries, observer) => {
