@@ -46,54 +46,52 @@
       </p>
     </section>
     <script>
-      const onEnter = (element, index, direction) => {
-
+      const enterLeaveTop = (response) => {
+        const el = response.element
+        el.style.opacity = response.progress > 0.9 ? 0.9 :
+         response.progress < 0.4 ? 0.4 :
+         response.progress
+       const text = document.getElementById('step')
+       text.textContent = `Now we'd display the animation for step ${el.id}`
       }
-      const scroller = scrollama()
-      scroller
-        .setup({
-          step: '.step',
-          offset: '0.2',
-          progress: true,
-          threshold: 50,
-          debug: true
-        })
-        .onStepEnter((response) => {
-          // { element, index, direction }
-        })
-        .onStepExit((response) => {
-          // { element, index, direction }
-        })
-      window.addEventListener('resize', scroller.resize)
-
-
-      const handleScroll = (entries, observer) => {
-        entries.forEach(entry => {
-          console.log(entry)
-          entry.target.style.opacity = .9-(entry.intersectionRatio/2)
-          if (entry.isIntersecting) {
-            const text = document.getElementById('step')
-            text.textContent = `Now we'd display the animation for step ${entry.target.id}`
-          }
-        })
+      const topTrigger = scrollama();
+      (() => {
+        topTrigger
+          .setup({
+            step: '.text',
+            offset: 0.2,
+            progress: true,
+            threshold: 4,
+            debug: false
+          })
+          .onStepProgress(enterLeaveTop)
+        window.addEventListener('resize', topTrigger.resize)
+      })()
+      const enterLeaveBottom = (response) => {
+        const el = response.element
+        el.style.opacity = response.progress > 0.9 ? 0.4 :
+         response.progress < 0.1 ? 0.9 :
+         1-response.progress < 0.4 ? 0.4 :
+         1-response.progress
+       const text = document.getElementById('step')
+       text.textContent = `Now we'd display the animation for step ${el.id}`
+       if (el.id === 'one' && response.progress === 0) {
+         text.textContent = `Scroll to start "animation"`
+       }
       }
-      const createObserver = target => {
-        const options = {
-          root: null,
-          rootMargin: '-20% -5% -30% -5%',
-          threshold: [0, .1, .25, .5, .75, 1]
-        }
-        const observer = new IntersectionObserver(handleScroll, options)
-        observer.observe(target)
-      }
-      window.addEventListener('load', () => {
-        const one = document.getElementById('one')
-        const two = document.getElementById('two')
-        const three = document.getElementById('three')
-        createObserver(one)
-        createObserver(two)
-        createObserver(three)
-      })
+      const bottomTrigger = scrollama();
+      (() => {
+        bottomTrigger
+          .setup({
+            step: '.text',
+            offset: 0.7,
+            progress: true,
+            threshold: 4,
+            debug: false
+          })
+          .onStepProgress(enterLeaveBottom)
+        window.addEventListener('resize', bottomTrigger.resize)
+      })()
     </script>
   </body>
 </html>

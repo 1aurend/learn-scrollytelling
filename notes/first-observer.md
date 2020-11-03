@@ -42,7 +42,9 @@ I began by adding HTML for a couple of sections of the imagined "visual essay" i
 </html>
 ```
 
-Of note here is the `#scrolly` section. I knew I wanted the "animation" to be sticky and have the text boxes scroll over top, so I made all of them children of the one large section. However, `IntersectionObserver` only checks for intersections of elements with the their ancestors. In this case, `#animation` and the `#text` elements are siblings. More on how I solved this below, but a future test is to figure out how to do it where the sticky element is the parent of the scrolling text boxes.
+Of note here is the `#scrolly` section. I knew I wanted the "animation" to be sticky and have the text boxes scroll over top, so I made all of them children of the one large section. However, `IntersectionObserver` only checks for intersections of elements with the their ancestors. In this case, `#animation` and the `#text` elements are siblings. More on how I solved this below, but a future test is to figure out if it's possible to do with the sticky element as the parent of the scrolling text boxes.**
+
+(**Fwiw, I now think not. It messes up the sticky behavior if the things that are supposed to scroll over top are children of the sticky element.)
 
 ## 2. Key CSS
 
@@ -108,23 +110,26 @@ My text boxes are nothing special, but I made sure to assign them a starting opa
 
 Next I started to write the script for the observer.
 
-First, I copied in the basic setup from the MDN docs
+First, I copied in the basic setup from the MDN docs:
 ```js
 const createObserver = target => {
   const options = {
     root: null,
     rootMargin: '0px',
-    threshold: [0, .1, .25, .5, .75, 1]
+    threshold: 0
   }
   const observer = new IntersectionObserver(handleScroll, options)
 }
 ```
+
+Then I wrote a very simple observer callback to see what information gets passed to the observer callback:
 ```js
 const handleScroll = (entries, observer) => {
   entries.forEach(entry => {
     console.log(entry)
 }
 ```
+Here's a snipet of the output of that log:
 ```js
 IntersectionObserverEntry: {
   boundingClientRect: DOMRect { x: 237, y: 2445.25, width: 398, … },
@@ -136,6 +141,9 @@ IntersectionObserverEntry: {
   time: 60
 }
 ```
+The key properties here for my project were `intersectionRatio`, `isIntersecting`, and `target`.
+
+Let's start with `target`. It's exactly what you think-- the DOM element that has
 
 ```js
 const createObserver = (one, two, three) => {
@@ -150,3 +158,7 @@ const createObserver = (one, two, three) => {
   observer.observe(three)
 }
 ```
+
+## 4. Calibrate the Observer
+
+The final script turned out like this:
