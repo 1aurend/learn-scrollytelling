@@ -119,8 +119,10 @@ const createObserver = target => {
     threshold: 0
   }
   const observer = new IntersectionObserver(handleScroll, options)
+  observer.observe(target)
 }
 ```
+Note that `root` here is `null`, which defaults to the viewport.
 
 Then I wrote a very simple observer callback to see what information gets passed to the observer callback:
 ```js
@@ -129,7 +131,16 @@ const handleScroll = (entries, observer) => {
     console.log(entry)
 }
 ```
-Here's a snipet of the output of that log:
+Finally, I initiated the observer with a `load` event:
+```js
+window.addEventListener('load', () => {
+  const one = document.getElementById('one')
+  createObserver(one, two, three)
+})
+```
+I'd like to know more about how necessary this is. The MDN doc recommends it, so we know that the DOM elements we're passing to the observer have been created, but the Scrollama demos don't use a load event, and I did a test using IIFEs that seemed to work fine.
+
+Back to the observer callback-- Here's a snipet of the output of that log:
 ```js
 IntersectionObserverEntry: {
   boundingClientRect: DOMRect { x: 237, y: 2445.25, width: 398, … },
@@ -141,9 +152,7 @@ IntersectionObserverEntry: {
   time: 60
 }
 ```
-The key properties here for my project were `intersectionRatio`, `isIntersecting`, and `target`.
-
-Let's start with `target`. It's exactly what you think-- the DOM element that has
+The key properties here for my project were `intersectionRatio`, `isIntersecting`, and `target`. Let's start with `target`. It's exactly what you think-- the DOM element that has entered the viewport or observed DOM node. `isIntersecting` is a boolean that triggers when the element is in the interesection area. The observer callback runs on load, so if logging entries, you'll get an `isIntersecting:false` entry to kick things off if your scrolling elements are off screen. Finally, `intersectionRatio` is also what it sounds like, the approximate percentage of the target element that is in the intersection zone. (See [my notes from the MDN doc](./IntersectionObserver.md) for a little about the limitations of this.)
 
 ```js
 const createObserver = (one, two, three) => {
