@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <link rel="stylesheet" href="./first-observer.css"/>
+    <script src="https://unpkg.com/intersection-observer"></script>
+    <script src="https://unpkg.com/scrollama"></script>
+  </head>
+  <body>
+    <div id="hero">Pretend I'm a hero image...</div>
+    <section id="intro">
+      <h1>Title</h1>
+      <p>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Luctus venenatis lectus magna fringilla urna porttitor. Mauris pellentesque pulvinar pellentesque habitant morbi tristique. Lorem mollis aliquam ut porttitor leo a diam sollicitudin tempor. Scelerisque in dictum non consectetur a erat nam at. Consequat interdum varius sit amet. Mus mauris vitae ultricies leo integer malesuada. Aenean vel elit scelerisque mauris. Vitae et leo duis ut diam quam nulla porttitor. Feugiat pretium nibh ipsum consequat. Senectus et netus et malesuada fames ac turpis. Enim ut sem viverra aliquet eget sit amet. Tellus orci ac auctor augue mauris augue neque gravida. Faucibus scelerisque eleifend donec pretium vulputate sapien nec.
+      </p>
+      <p>
+        Nibh tellus molestie nunc non blandit massa enim. Integer eget aliquet nibh praesent tristique magna sit amet purus. Bibendum enim facilisis gravida neque convallis a cras. Fermentum dui faucibus in ornare quam viverra orci sagittis. Maecenas accumsan lacus vel facilisis volutpat est. Sagittis nisl rhoncus mattis rhoncus urna neque viverra justo. Lectus quam id leo in vitae. Potenti nullam ac tortor vitae purus faucibus ornare suspendisse. Duis convallis convallis tellus id. A diam maecenas sed enim ut sem viverra. Cras adipiscing enim eu turpis egestas pretium aenean. Dictum non consectetur a erat nam. Etiam sit amet nisl purus.
+      </p>
+    </section>
+    <section id="scrolly">
+      <div id="animation">
+        <h4 id="step">Scroll to start "animation"</h4>
+      </div>
+      <div class="text" id="one">
+        <p>
+          Step 1: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        </p>
+      </div>
+      <div class="text" id="two">
+        <p>
+          Step 2: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        </p>
+      </div>
+      <div class="text" id="three">
+        <p>
+          Step 3: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        </p>
+      </div>
+    </section>
+    <section id="next-chunk">
+      <p>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Luctus venenatis lectus magna fringilla urna porttitor. Mauris pellentesque pulvinar pellentesque habitant morbi tristique. Lorem mollis aliquam ut porttitor leo a diam sollicitudin tempor. Scelerisque in dictum non consectetur a erat nam at. Consequat interdum varius sit amet. Mus mauris vitae ultricies leo integer malesuada. Aenean vel elit scelerisque mauris. Vitae et leo duis ut diam quam nulla porttitor. Feugiat pretium nibh ipsum consequat. Senectus et netus et malesuada fames ac turpis. Enim ut sem viverra aliquet eget sit amet. Tellus orci ac auctor augue mauris augue neque gravida. Faucibus scelerisque eleifend donec pretium vulputate sapien nec.
+      </p>
+      <p>
+        Nibh tellus molestie nunc non blandit massa enim. Integer eget aliquet nibh praesent tristique magna sit amet purus. Bibendum enim facilisis gravida neque convallis a cras. Fermentum dui faucibus in ornare quam viverra orci sagittis. Maecenas accumsan lacus vel facilisis volutpat est. Sagittis nisl rhoncus mattis rhoncus urna neque viverra justo. Lectus quam id leo in vitae. Potenti nullam ac tortor vitae purus faucibus ornare suspendisse. Duis convallis convallis tellus id. A diam maecenas sed enim ut sem viverra. Cras adipiscing enim eu turpis egestas pretium aenean. Dictum non consectetur a erat nam. Etiam sit amet nisl purus.
+      </p>
+    </section>
+    <script>
+      const enterLeaveTop = (response) => {
+        const el = response.element
+        el.style.opacity = response.progress > 0.9 ? 0.9 :
+         response.progress < 0.4 ? 0.4 :
+         response.progress
+       const text = document.getElementById('step')
+       text.textContent = `Now we'd display the animation for step ${el.id}`
+      }
+      const enterLeaveBottom = (response) => {
+        const el = response.element
+        el.style.opacity = response.progress > 0.9 ? 0.4 :
+         response.progress < 0.1 ? 0.9 :
+         1-response.progress < 0.4 ? 0.4 :
+         1-response.progress
+       const text = document.getElementById('step')
+       text.textContent = `Now we'd display the animation for step ${el.id}`
+       if (el.id === 'one' && response.progress === 0) {
+         text.textContent = `Scroll to start "animation"`
+       }
+      }
+      const createScrollamaTrigger = (offset, callback) => {
+        const trigger = scrollama()
+        trigger
+          .setup({
+            step: '.text',
+            offset: offset,
+            progress: true,
+            threshold: 4,
+            debug: false
+          })
+          .onStepProgress(callback)
+        window.addEventListener('resize', trigger.resize)
+      }
+      const init = () => {
+        const top = createScrollamaTrigger(0.2, enterLeaveTop)
+        const bottom = createScrollamaTrigger(0.7, enterLeaveBottom)
+      }
+      init()
+    </script>
+  </body>
+</html>
