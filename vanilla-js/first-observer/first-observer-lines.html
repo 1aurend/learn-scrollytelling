@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <link rel="stylesheet" href="./first-observer.css"/>
+  </head>
+  <body>
+    <div id="hero">Pretend I'm a hero image...</div>
+    <section id="intro">
+      <h1>Title</h1>
+      <p>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Luctus venenatis lectus magna fringilla urna porttitor. Mauris pellentesque pulvinar pellentesque habitant morbi tristique. Lorem mollis aliquam ut porttitor leo a diam sollicitudin tempor. Scelerisque in dictum non consectetur a erat nam at. Consequat interdum varius sit amet. Mus mauris vitae ultricies leo integer malesuada. Aenean vel elit scelerisque mauris. Vitae et leo duis ut diam quam nulla porttitor. Feugiat pretium nibh ipsum consequat. Senectus et netus et malesuada fames ac turpis. Enim ut sem viverra aliquet eget sit amet. Tellus orci ac auctor augue mauris augue neque gravida. Faucibus scelerisque eleifend donec pretium vulputate sapien nec.
+      </p>
+      <p>
+        Nibh tellus molestie nunc non blandit massa enim. Integer eget aliquet nibh praesent tristique magna sit amet purus. Bibendum enim facilisis gravida neque convallis a cras. Fermentum dui faucibus in ornare quam viverra orci sagittis. Maecenas accumsan lacus vel facilisis volutpat est. Sagittis nisl rhoncus mattis rhoncus urna neque viverra justo. Lectus quam id leo in vitae. Potenti nullam ac tortor vitae purus faucibus ornare suspendisse. Duis convallis convallis tellus id. A diam maecenas sed enim ut sem viverra. Cras adipiscing enim eu turpis egestas pretium aenean. Dictum non consectetur a erat nam. Etiam sit amet nisl purus.
+      </p>
+    </section>
+    <section id="scrolly">
+      <div id="animation">
+        <h4 id="step">Scroll to start "animation"</h4>
+      </div>
+      <div class="text" id="one">
+        <p>
+          Step 1: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        </p>
+      </div>
+      <div class="text" id="two">
+        <p>
+          Step 2: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        </p>
+      </div>
+      <div class="text" id="three">
+        <p>
+          Step 3: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        </p>
+      </div>
+    </section>
+    <section id="next-chunk">
+      <p>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Luctus venenatis lectus magna fringilla urna porttitor. Mauris pellentesque pulvinar pellentesque habitant morbi tristique. Lorem mollis aliquam ut porttitor leo a diam sollicitudin tempor. Scelerisque in dictum non consectetur a erat nam at. Consequat interdum varius sit amet. Mus mauris vitae ultricies leo integer malesuada. Aenean vel elit scelerisque mauris. Vitae et leo duis ut diam quam nulla porttitor. Feugiat pretium nibh ipsum consequat. Senectus et netus et malesuada fames ac turpis. Enim ut sem viverra aliquet eget sit amet. Tellus orci ac auctor augue mauris augue neque gravida. Faucibus scelerisque eleifend donec pretium vulputate sapien nec.
+      </p>
+      <p>
+        Nibh tellus molestie nunc non blandit massa enim. Integer eget aliquet nibh praesent tristique magna sit amet purus. Bibendum enim facilisis gravida neque convallis a cras. Fermentum dui faucibus in ornare quam viverra orci sagittis. Maecenas accumsan lacus vel facilisis volutpat est. Sagittis nisl rhoncus mattis rhoncus urna neque viverra justo. Lectus quam id leo in vitae. Potenti nullam ac tortor vitae purus faucibus ornare suspendisse. Duis convallis convallis tellus id. A diam maecenas sed enim ut sem viverra. Cras adipiscing enim eu turpis egestas pretium aenean. Dictum non consectetur a erat nam. Etiam sit amet nisl purus.
+      </p>
+    </section>
+    <script>
+      const handleScroll = (entries, observer) => {
+        entries.forEach(entry => {
+          console.log(entry)
+          entry.target.style.opacity = .9-(entry.intersectionRatio/2)
+          if (entry.isIntersecting) {
+            const text = document.getElementById('step')
+            text.textContent = `Now we'd display the animation for step ${entry.target.id}`
+          }
+        })
+      }
+      const createObserver = (offset, element, callback) => {
+        const options = {
+          root: null,
+          rootMargin: offset,
+          threshold: [0, .1, .25, .5, .75, 1]
+        }
+        const observer = new IntersectionObserver(callback, options)
+        observer.observe(element)
+      }
+      window.addEventListener('load', () => {
+        const vh = window.innerHeight
+        const steps = document.querySelectorAll('.text')
+        steps.forEach(step => {
+          const stepHeight = step.offsetHeight
+          const topTriggerMargin = {
+            top: -(0.2*vh),
+            bottom: -((0.8*vh) - stepHeight)
+          }
+          const bottomTriggerMargin = {
+            top: -((0.7*vh) - stepHeight),
+            bottom: -(0.3*vh)
+          }
+
+          const el = document.createElement("div");
+            el.style.position = "fixed";
+            el.style.left = "0";
+            el.style.top = `${((0.7*vh) - stepHeight)}px`;
+            el.style.width = "100%";
+            el.style.height = "0";
+            el.style.borderTop = "2px dashed black";
+            el.style.zIndex = "9999";
+            document.body.appendChild(el);
+          const elem = document.createElement("div");
+            elem.style.position = "fixed";
+            elem.style.left = "0";
+            elem.style.bottom = `${((0.8*vh) - stepHeight)}px`;
+            elem.style.width = "100%";
+            elem.style.height = "0";
+            elem.style.borderTop = "2px dashed black";
+            elem.style.zIndex = "9999";
+            document.body.appendChild(elem);
+
+          const tTMStr = `${topTriggerMargin.top}px 0px ${topTriggerMargin.bottom}px 0px`
+          const bTMStr = `${bottomTriggerMargin.top}px 0px ${bottomTriggerMargin.bottom}px 0px`
+          console.log(bTMStr);
+          createObserver(tTMStr, step, handleScroll)
+          createObserver(bTMStr, step, handleScroll)
+        })
+      })
+    </script>
+  </body>
+</html>
