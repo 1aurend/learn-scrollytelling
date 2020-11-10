@@ -47,6 +47,7 @@
     </section>
     <script>
       const enterLeaveTop = (response) => {
+        console.log(response)
         const el = response.element
         el.style.opacity = response.progress > 0.9 ? 0.9 :
          response.progress < 0.4 ? 0.4 :
@@ -74,7 +75,7 @@
             offset: offset,
             progress: true,
             threshold: 4,
-            debug: false
+            debug: true
           })
           .onStepProgress(callback)
         window.addEventListener('resize', trigger.resize)
