@@ -28,7 +28,8 @@ export default function CenterScrolly(props) {
     spacingBetween
   } = props
   const [activeStep, setActive] = useState(null)
-  const [opacity, setOpacity] = useState(Array(Object.keys(steps).length).fill(minOpacity))
+  const numSteps = Object.keys(steps).length
+  const [opacity, setOpacity] = useState(Array(numSteps).fill(minOpacity))
 
   useEffect(() => {
     const intersectTop = response => {
@@ -107,6 +108,11 @@ export default function CenterScrolly(props) {
         {animation}
       </Box>
       {boxSteps}
+      <Box
+        height={`${topOffset*100}vh`}
+        width={textBoxWidth}
+        >
+      </Box>
     </Flex>
   )
 }
