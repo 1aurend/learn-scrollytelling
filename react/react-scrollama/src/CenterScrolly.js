@@ -29,7 +29,6 @@ export default function CenterScrolly(props) {
   } = props
   const [activeStep, setActive] = useState(null)
   const [opacity, setOpacity] = useState(Array(Object.keys(steps).length).fill(minOpacity))
-  console.log(opacity)
 
   useEffect(() => {
     const intersectTop = response => {
@@ -71,7 +70,6 @@ export default function CenterScrolly(props) {
   }, [id, bottomOffset, topOffset, maxOpacity, minOpacity])
 
   const boxSteps = Object.values(steps).map((step, i) => {
-    console.log(`${textBoxColor}${Math.round(opacity[i]*100)}`)
     return <Box
             bg={`${textBoxColor}${Math.round(opacity[i]*100)}`}
             sx={{
