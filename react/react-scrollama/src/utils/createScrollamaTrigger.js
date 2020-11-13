@@ -7,13 +7,19 @@ const createScrollamaTrigger = params => {
     .setup({
       step: `.${id}-step`,
       offset: offset,
-      progress: true,
+      progress: !!progress,
       threshold: 4,
       debug: false
     })
-    .onStepEnter(enter)
-    .onStepExit(exit)
-    .onStepProgress(progress)
+    if (!!enter) {
+      trigger.onStepEnter(enter)
+    }
+    if (!!progress) {
+      trigger.onStepProgress(progress)
+    }
+    if (!!exit) {
+      trigger.onStepExit(exit)
+    }
   window.addEventListener('resize', trigger.resize)
 }
 

@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom'
 // import Scrolly from './Scrolly'
 // import StatelessScrolly from './Scrolly-no-state'
 import CenterScrolly from './CenterScrolly'
+import SideScrolly from './SideScrolly'
 import MockAnim from './demos/MockAnim'
 import steps from './demos/textSteps'
 import reportWebVitals from './reportWebVitals'
@@ -23,9 +24,17 @@ ReactDOM.render(
       id='middle-padding'
       >
     </Box>
-    <CenterScrolly id='two' steps={steps} textBoxColor='#76a9ee'>
+    <SideScrolly id='two' steps={steps} textBoxColor='#76a9ee' right={false}>
       <MockAnim />
-    </CenterScrolly>
+    </SideScrolly>
+    <Box
+      height='75%'
+      id='middle-padding'
+      >
+    </Box>
+    <SideScrolly id='three' steps={steps}>
+      <MockAnim />
+    </SideScrolly>
     <Box
       height='75%'
       id='bottom-padding'
