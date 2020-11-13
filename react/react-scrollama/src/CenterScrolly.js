@@ -1,55 +1,99 @@
 import React, {
   useState,
   useEffect,
-  cloneElement
+  cloneElement,
+  Children
 } from 'react'
-import scrollama from 'scrollama'
 import 'intersection-observer'
 import {
   Box,
   Flex
 } from 'rebass'
+import PropTypes from 'prop-types'
+import createScrollamaTrigger from './utils/createScrollamaTrigger'
 
 
-const createScrollamaTrigger = (offset, callback, id) => {
-  const trigger = scrollama()
-  trigger
-    .setup({
-      step: `${id}-step`,
-      offset: offset,
-      progress: true,
-      threshold: 4,
-      debug: true
-    })
-    .onStepProgress(callback)
-  window.addEventListener('resize', trigger.resize)
-}
+export default function CenterScrolly(props) {
+  const {
+    children,
+    steps,
+    id,
+    topOffset,
+    bottomOffset,
+    textBoxColor,
+    minOpacity,
+    maxOpacity,
+    textBoxWidth,
+    textColor,
+    spacingBetween
+  } = props
+  const [activeStep, setActive] = useState(null)
+  const [opacity, setOpacity] = useState(Array(Object.keys(steps).length).fill(minOpacity))
+  console.log(opacity)
 
-
-export default function CenterScrolly({ children, steps, id }) {
-  const [activeStep, setActive] = useState(0)
-  const [opacity, setOpacity] = useState([0.2, 0.2])
   useEffect(() => {
-    const changeOpacity = response => {
-      setOpacity(opacity => {return {...opacity, [response.index]: 0.2 + response.progress}})
+    const intersectTop = response => {
+      const newOpacity = response.progress > maxOpacity ? maxOpacity :
+       response.progress < minOpacity ? minOpacity :
+       response.progress
+      setOpacity(opacity => {return {...opacity, [response.index]: newOpacity}})
     }
-    createScrollamaTrigger(0.5, changeOpacity)
-  }, [])
+    const intersectBottom = response => {
+      const newOpacity = response.progress > maxOpacity ? minOpacity :
+       response.progress < 1-maxOpacity ? maxOpacity :
+       1-response.progress < minOpacity ? minOpacity :
+       1-response.progress
+      setOpacity(opacity => {return {...opacity, [response.index]: newOpacity}})
+    }
+    const reset = response => {
+      if (response.direction === 'up' && response.index === 0) {
+        setActive(null)
+      }
+    }
+    const activateStep = response => {
+      setActive(response.index)
+    }
+    const topParams = {
+      offset: topOffset,
+      progress: intersectTop,
+      enter: activateStep,
+      id: id
+    }
+    const bottomParams = {
+      offset: bottomOffset,
+      progress: intersectBottom,
+      enter: activateStep,
+      exit: reset,
+      id: id
+    }
+    createScrollamaTrigger(topParams)
+    createScrollamaTrigger(bottomParams)
+  }, [id, bottomOffset, topOffset, maxOpacity, minOpacity])
 
-  const boxSteps = steps.map(step => {
+  const boxSteps = Object.values(steps).map((step, i) => {
+    console.log(`${textBoxColor}${Math.round(opacity[i]*100)}`)
     return <Box
-            bg='teal'
-            sx={{opacity: opacity[0]}}
-            width='40%'
-            height='10%'
+            bg={`${textBoxColor}${Math.round(opacity[i]*100)}`}
+            sx={{
+              zIndex: 99,
+              '@media screen and (max-width: 64em)': {
+                fontSize: '.9em'
+              }
+            }}
+            width={textBoxWidth}
             className={`${id}-step`}
             textAlign='center'
-            mb='20%'
+            color={textColor}
+            fontSize='1em'
+            m='10%'
+            mb={spacingBetween}
+            key={i}
+            p='20px'
             >
             {step}
           </Box>
   })
-  const onlyChild = React.children.only(children)
+  const onlyChild = Children.only(children)
   const animation = cloneElement(onlyChild, {active: activeStep})
 
   return (
@@ -59,15 +103,38 @@ export default function CenterScrolly({ children, steps, id }) {
       p='10%'
       >
       <Box
-        border='2px solid teal'
-        width='50%'
-        height='50%'
-        className={`${id}-step`}
-        sx={{position: 'sticky', top: '25%'}}
+        className={`${id}-sticky`}
+        sx={{position: 'sticky', top: `${topOffset*100}%`}}
         >
         {animation}
       </Box>
       {boxSteps}
     </Flex>
   )
+}
+
+CenterScrolly.propTypes = {
+  steps: PropTypes.objectOf(PropTypes.string).isRequired,
+  id: PropTypes.string.isRequired,
+  children: PropTypes.node.isRequired,
+  topOffset: PropTypes.number,
+  bottomOffset: PropTypes.number,
+  textBoxColor: PropTypes.string,
+  minOpacity: PropTypes.number,
+  maxOpacity: PropTypes.number,
+  textBoxWidth: PropTypes.string,
+  textColor: PropTypes.string,
+  spacingBetween: PropTypes.string
+}
+
+CenterScrolly.defaultProps = {
+  id: 'xyz',
+  topOffset: 0.25,
+  bottomOffset: 0.75,
+  textBoxColor: '#d6dbe1',
+  minOpacity: 0.4,
+  maxOpacity: 0.9,
+  textBoxWidth: '40%',
+  textColor: 'black',
+  spacingBetween: '40%'
 }
