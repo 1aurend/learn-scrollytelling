@@ -20,6 +20,8 @@ export default function CenterScrolly(props) {
     id,
     topOffset,
     bottomOffset,
+    stickyHeight,
+    stickyWidth,
     textBoxColor,
     minOpacity,
     maxOpacity,
@@ -103,13 +105,15 @@ export default function CenterScrolly(props) {
       >
       <Box
         className={`${id}-sticky`}
+        height={stickyHeight}
+        width={stickyWidth}
         sx={{position: 'sticky', top: `${topOffset*100}%`}}
         >
         {animation}
       </Box>
       {boxSteps}
       <Box
-        height={`${topOffset*100}vh`}
+        height={`${topOffset*150}vh`}
         width={textBoxWidth}
         >
       </Box>
@@ -123,6 +127,8 @@ CenterScrolly.propTypes = {
   children: PropTypes.node.isRequired,
   topOffset: PropTypes.number,
   bottomOffset: PropTypes.number,
+  stickyHeight: PropTypes.string,
+  stickyWidth: PropTypes.string,
   textBoxColor: PropTypes.string,
   minOpacity: PropTypes.number,
   maxOpacity: PropTypes.number,
@@ -133,8 +139,10 @@ CenterScrolly.propTypes = {
 
 CenterScrolly.defaultProps = {
   id: 'xyz',
-  topOffset: 0.25,
-  bottomOffset: 0.75,
+  topOffset: 0.2,
+  bottomOffset: 0.8,
+  stickyHeight: '60vh',
+  stickyWidth: '60vw',
   textBoxColor: '#d6dbe1',
   minOpacity: 0.4,
   maxOpacity: 0.9,

@@ -20,32 +20,17 @@ export default function SideScrolly(props) {
     id,
     topOffset,
     bottomOffset,
+    stickyHeight,
+    stickyWidth,
     textBoxColor,
-    minOpacity,
-    maxOpacity,
     textBoxWidth,
     textColor,
     spacingBetween,
     right
   } = props
   const [activeStep, setActive] = useState(null)
-  const numSteps = Object.keys(steps).length
-  const [opacity, setOpacity] = useState(Array(numSteps).fill(minOpacity))
 
   useEffect(() => {
-    const intersectTop = response => {
-      const newOpacity = response.progress > maxOpacity ? maxOpacity :
-       response.progress < minOpacity ? minOpacity :
-       response.progress
-      setOpacity(opacity => {return {...opacity, [response.index]: newOpacity}})
-    }
-    const intersectBottom = response => {
-      const newOpacity = response.progress > maxOpacity ? minOpacity :
-       response.progress < 1-maxOpacity ? maxOpacity :
-       1-response.progress < minOpacity ? minOpacity :
-       1-response.progress
-      setOpacity(opacity => {return {...opacity, [response.index]: newOpacity}})
-    }
     const reset = response => {
       if (response.direction === 'up' && response.index === 0) {
         setActive(null)
@@ -56,24 +41,22 @@ export default function SideScrolly(props) {
     }
     const topParams = {
       offset: topOffset,
-      progress: intersectTop,
       enter: activateStep,
       id: id
     }
     const bottomParams = {
       offset: bottomOffset,
-      progress: intersectBottom,
       enter: activateStep,
       exit: reset,
       id: id
     }
     createScrollamaTrigger(topParams)
     createScrollamaTrigger(bottomParams)
-  }, [id, bottomOffset, topOffset, maxOpacity, minOpacity])
+  }, [id, bottomOffset, topOffset])
 
   const boxSteps = Object.values(steps).map((step, i) => {
     return <Box
-            bg={`${textBoxColor}${Math.round(opacity[i]*100)}`}
+            bg={textBoxColor}
             sx={{
               zIndex: 99,
               '@media screen and (max-width: 64em)': {
@@ -121,11 +104,13 @@ export default function SideScrolly(props) {
       <Flex
         flexDirection='column'
         alignItems='center'
-        p='10%'
+        p='5%'
         width='50%'
         >
         <Box
           className={`${id}-sticky`}
+          height={stickyHeight}
+          width={stickyWidth}
           sx={{position: 'sticky', top: `${topOffset*100}%`}}
           >
           {animation}
@@ -159,9 +144,9 @@ SideScrolly.propTypes = {
   children: PropTypes.node.isRequired,
   topOffset: PropTypes.number,
   bottomOffset: PropTypes.number,
+  stickyHeight: PropTypes.string,
+  stickyWidth: PropTypes.string,
   textBoxColor: PropTypes.string,
-  minOpacity: PropTypes.number,
-  maxOpacity: PropTypes.number,
   textBoxWidth: PropTypes.string,
   textColor: PropTypes.string,
   spacingBetween: PropTypes.string,
@@ -172,9 +157,9 @@ SideScrolly.defaultProps = {
   id: 'xyz',
   topOffset: 0.25,
   bottomOffset: 0.75,
+  stickyHeight: '50vh',
+  stickyWidth: '40vw',
   textBoxColor: '#d6dbe1',
-  minOpacity: 0.4,
-  maxOpacity: 0.9,
   textBoxWidth: '90%',
   textColor: 'black',
   spacingBetween: '150%',

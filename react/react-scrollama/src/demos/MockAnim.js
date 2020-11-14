@@ -34,8 +34,8 @@ export default function MockAnim({ active }) {
   }, [active])
   return (
     <Box
-      height='50vh'
-      width='50vw'
+      height='inherit'
+      width='inherit'
       bg={bg}
       >
     </Box>
