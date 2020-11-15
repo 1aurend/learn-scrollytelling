@@ -32,7 +32,15 @@ ReactDOM.render(
       id='middle-padding'
       >
     </Box>
-    <SideScrolly id='three' steps={steps}>
+    <SideScrolly
+      id='three'
+      steps={steps}
+      textColumnWidth={0.3}
+      stickyHeight='70vh'
+      stickyWidth='50vw'
+      topOffset={0.15}
+      bottomOffset={0.85}
+      >
       <MockAnim />
     </SideScrolly>
     <Box

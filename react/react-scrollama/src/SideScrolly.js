@@ -26,9 +26,11 @@ export default function SideScrolly(props) {
     textBoxWidth,
     textColor,
     spacingBetween,
-    right
+    right,
+    textColumnWidth
   } = props
   const [activeStep, setActive] = useState(null)
+  const numSteps = Object.keys(steps).length
 
   useEffect(() => {
     const reset = response => {
@@ -68,8 +70,7 @@ export default function SideScrolly(props) {
             textAlign='center'
             color={textColor}
             fontSize='1em'
-            m='10%'
-            mb={spacingBetween}
+            mb={i+1 === numSteps? '100%' : spacingBetween}
             key={i}
             p='20px'
             >
@@ -86,8 +87,8 @@ export default function SideScrolly(props) {
       {right && <Flex
         flexDirection='column'
         alignItems='center'
-        p='10%'
-        width='50%'
+        p='5%'
+        width={`${textColumnWidth*100}%`}
         >
         <Box
           height={`${bottomOffset*100}vh`}
@@ -95,17 +96,12 @@ export default function SideScrolly(props) {
           >
         </Box>
         {boxSteps}
-        <Box
-          height={`${topOffset*100}vh`}
-          width={textBoxWidth}
-          >
-        </Box>
       </Flex>}
       <Flex
         flexDirection='column'
         alignItems='center'
         p='5%'
-        width='50%'
+        width={`${(1-textColumnWidth)*100}%`}
         >
         <Box
           className={`${id}-sticky`}
@@ -119,8 +115,8 @@ export default function SideScrolly(props) {
       {!right && <Flex
         flexDirection='column'
         alignItems='center'
-        p='10%'
-        width='50%'
+        p='5%'
+        width={`${textColumnWidth*100}%`}
         >
         <Box
           height={`${bottomOffset*100}vh`}
@@ -128,11 +124,6 @@ export default function SideScrolly(props) {
           >
         </Box>
         {boxSteps}
-        <Box
-          height={`${topOffset*100}vh`}
-          width={textBoxWidth}
-          >
-        </Box>
       </Flex>}
     </Flex>
   )
@@ -150,7 +141,8 @@ SideScrolly.propTypes = {
   textBoxWidth: PropTypes.string,
   textColor: PropTypes.string,
   spacingBetween: PropTypes.string,
-  right: PropTypes.bool
+  right: PropTypes.bool,
+  textColumnWidth: PropTypes.number
 }
 
 SideScrolly.defaultProps = {
@@ -164,4 +156,5 @@ SideScrolly.defaultProps = {
   textColor: 'black',
   spacingBetween: '150%',
   right: true,
+  textColumnWidth: 0.5
 }
