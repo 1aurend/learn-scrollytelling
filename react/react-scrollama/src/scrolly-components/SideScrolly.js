@@ -10,7 +10,7 @@ import {
   Flex
 } from 'rebass'
 import PropTypes from 'prop-types'
-import createScrollamaTrigger from './utils/createScrollamaTrigger'
+import createScrollamaTrigger from '../utils/createScrollamaTrigger'
 
 
 export default function SideScrolly(props) {
