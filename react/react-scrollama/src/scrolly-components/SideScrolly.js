@@ -27,7 +27,8 @@ export default function SideScrolly(props) {
     textColor,
     spacingBetween,
     right,
-    textColumnWidth
+    textColumnWidth,
+    animationPadding,
   } = props
   const [activeStep, setActive] = useState(null)
   const numSteps = Object.keys(steps).length
@@ -100,7 +101,7 @@ export default function SideScrolly(props) {
       <Flex
         flexDirection='column'
         alignItems='center'
-        p='5%'
+        p={animationPadding}
         width={`${(1-textColumnWidth)*100}%`}
         >
         <Box
@@ -142,7 +143,8 @@ SideScrolly.propTypes = {
   textColor: PropTypes.string,
   spacingBetween: PropTypes.string,
   right: PropTypes.bool,
-  textColumnWidth: PropTypes.number
+  textColumnWidth: PropTypes.number,
+  animationPadding: PropTypes.string
 }
 
 SideScrolly.defaultProps = {
@@ -156,5 +158,6 @@ SideScrolly.defaultProps = {
   textColor: 'black',
   spacingBetween: '150%',
   right: true,
-  textColumnWidth: 0.5
+  textColumnWidth: 0.5,
+  animations: '5%',
 }
