@@ -79,7 +79,7 @@ export default function SideScrolly(props) {
           </Box>
   })
   const onlyChild = Children.only(children)
-  const animation = cloneElement(onlyChild, {active: activeStep})
+  const animation = cloneElement(onlyChild, {active: activeStep, imgWidth: stickyWidth})
 
   return (
     <Flex
