@@ -17,7 +17,7 @@ export default function ZoomEx() {
       textColumnWidth={0.25}
       stickyWidth={'75vw'}
       stickyHeight={'100vh'}
-      spacingBetween={'60vh'}
+      spacingBetween={'50vh'}
       fontSize={'1.75em'}
       titleSize={'2.5em'}
       textBoxColor={'none'}

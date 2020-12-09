@@ -42,7 +42,7 @@ const TransformHandler = props => {
       x,
       y,
       nextS,
-      500,
+      1000,
       'easeOut'
     )
     prevX.current = nextX
