@@ -1,32 +1,29 @@
 import React from 'react'
 import CenterScrolly from '../scrolly-components/CenterScrolly'
 import SideScrolly from '../scrolly-components/SideScrolly'
-import steps from './textSteps'
 import Zoom from '../scrolly-components/Zoom'
 import dataViz from './dataviz.jpg'
+import { textSteps, imgSteps } from './imgZoom/content'
 
 
 export default function ZoomEx() {
-  const zooms = {
-    0: {x: 0, y: 0, s: 1},
-    1: {x: 0, y: 0, s: 3},
-    2: {x: 0, y: 0, s: 2},
-    3: {x: 0, y: 0, s: 4},
-    4: {x: 0, y: 0, s: 1}
-  }
-
   return (
     <SideScrolly
       id='main'
-      steps={steps}
+      steps={textSteps}
       topOffset={0}
+      bottomOffset={0.85}
       animationPadding={0}
       textColumnWidth={0.25}
       stickyWidth={'75vw'}
       stickyHeight={'100vh'}
-      spacingBetween={'90vh'}
+      spacingBetween={'60vh'}
+      fontSize={'1.75em'}
+      titleSize={'2.5em'}
+      textBoxColor={'none'}
+      textBoxWidth={'100%'}
       >
-      <Zoom steps={zooms} src={dataViz} />
+      <Zoom steps={imgSteps} src={dataViz} />
     </SideScrolly>
   )
 }

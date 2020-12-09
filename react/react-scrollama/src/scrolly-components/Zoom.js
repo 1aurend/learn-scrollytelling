@@ -3,7 +3,7 @@ import React, {
   useRef
 } from 'react'
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch'
-import { Flex } from 'rebass'
+import { Box } from 'rebass'
 
 
 const TransformHandler = props => {
@@ -18,49 +18,38 @@ const TransformHandler = props => {
   const prevY = useRef(0)
   const prevS = useRef(1)
   const pxFactor = useRef()
+
   useEffect(() => {
     if (el) {
       el.onload = () => {pxFactor.current = el.getBoundingClientRect()}
     }
   }, [el])
+
   useEffect(() => {
     console.log(active)
-    console.log(pxFactor.current)
-
     if (active === null) { return }
     const nextX = steps[active].x
     const nextY = steps[active].y
     const nextS = steps[active].s
-    if (nextS === prevS.current) { return }
-    const deltaX = prevX.current + nextX
-    const deltaY = prevY.current + nextY
-    const deltaS = -(nextS - prevS.current)
-    const imgFractionToPx = () => {
-      const xPx = deltaS > 0 ? -pxFactor.current.width*deltaS*.5 : (pxFactor.current.width*deltaS*.5)
-      console.log(xPx)
-      const yPx = deltaS > 0 ? -pxFactor.current.height*deltaS*.5 : (pxFactor.current.height*deltaS*.5)
-      console.log(yPx)
+    if (nextS === prevS.current && nextX === prevX.current && nextY === prevY.current) { return }
+    const ToPx = () => {
+      const xPx = -pxFactor.current.width*(nextS-1)*nextX
+      const yPx = -pxFactor.current.height*(nextS-1)*nextY
       return {x: xPx, y: yPx}
     }
-    let {x, y} = imgFractionToPx()
-    const s = steps[active].s
-    // if (nextS === 1) {
-    //   x = 0
-    //   y = 0
-    // }
+    const {x, y} = ToPx()
     setTransform(
       x,
       y,
-      s,
-      1000,
+      nextS,
+      500,
       'easeOut'
     )
     prevX.current = nextX
     prevY.current = nextY
     prevS.current = nextS
-    // pxFactor.current.width = pxFactor.current.width/(nextS*3)
-    // pxFactor.current.height = pxFactor.current.height/(nextS*3)
   }, [active, steps, setTransform, el])
+
   return children
 }
 
@@ -74,11 +63,10 @@ export default function Zoom(props) {
   const imgRef = useRef()
 
   return (
-    <Flex
+    <Box
       height='inherit'
       width='inherit'
       bg='#DE59EB'
-      justifyContent='flex-start'
       >
       <TransformWrapper
         defaultScale={1}
@@ -86,7 +74,8 @@ export default function Zoom(props) {
         defaultPositionY={0}
         options={{
           centerContent:false,
-          limitToWrapper:true,
+          limitToWrapper:false,
+          limitToBounds:false,
         }}
         wheel={{disabled: true}}
         pan={{disabled: true}}
@@ -96,7 +85,6 @@ export default function Zoom(props) {
         {({ setTransform, setScale, ...rest }) => (
           <TransformHandler
             setTransform={setTransform}
-            setScale={setScale}
             active={active}
             steps={steps}
             el={imgRef.current}
@@ -107,6 +95,6 @@ export default function Zoom(props) {
           </TransformHandler>
         )}
       </TransformWrapper>
-    </Flex>
+    </Box>
   )
 }

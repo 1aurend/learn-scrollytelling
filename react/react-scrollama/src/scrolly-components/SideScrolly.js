@@ -7,7 +7,8 @@ import React, {
 import 'intersection-observer'
 import {
   Box,
-  Flex
+  Flex,
+  Text
 } from 'rebass'
 import PropTypes from 'prop-types'
 import createScrollamaTrigger from '../utils/createScrollamaTrigger'
@@ -29,6 +30,8 @@ export default function SideScrolly(props) {
     right,
     textColumnWidth,
     animationPadding,
+    fontSize,
+    titleSize
   } = props
   const [activeStep, setActive] = useState(null)
   const numSteps = Object.keys(steps).length
@@ -39,17 +42,24 @@ export default function SideScrolly(props) {
         setActive(null)
       }
     }
-    const activateStep = response => {
-      setActive(response.index)
+    const activateTopStep = response => {
+      if (response.direction === 'up') {
+        setActive(response.index)
+      }
+    }
+    const activateBottomStep = response => {
+      if (response.direction === 'down') {
+        setActive(response.index)
+      }
     }
     const topParams = {
       offset: topOffset,
-      enter: activateStep,
+      enter: activateTopStep,
       id: id
     }
     const bottomParams = {
       offset: bottomOffset,
-      enter: activateStep,
+      enter: activateBottomStep,
       exit: reset,
       id: id
     }
@@ -57,27 +67,31 @@ export default function SideScrolly(props) {
     createScrollamaTrigger(bottomParams)
   }, [id, bottomOffset, topOffset])
 
-  const boxSteps = Object.values(steps).map((step, i) => {
-    return <Box
-            bg={textBoxColor}
-            sx={{
-              zIndex: 99,
-              '@media screen and (max-width: 64em)': {
-                fontSize: '.9em'
-              }
-            }}
-            width={textBoxWidth}
-            className={`${id}-step`}
-            textAlign='center'
-            color={textColor}
-            fontSize='1em'
-            mb={i+1 === numSteps? '100%' : spacingBetween}
-            key={i}
-            p='20px'
-            >
-            {step}
-          </Box>
-  })
+  const title = steps.title ? steps.title : null
+  const boxSteps = Object.keys(steps)
+    .filter(step => step !== 'title')
+    .map((step, i) => {
+      return <Box
+              bg={textBoxColor}
+              sx={{
+                zIndex: 99,
+                '@media screen and (max-width: 64em)': {
+                  fontSize: '.9em'
+                }
+              }}
+              width={textBoxWidth}
+              className={`${id}-step`}
+              textAlign='center'
+              color={textColor}
+              fontSize={fontSize}
+              fontFamily={`Castoro`}
+              mb={i+1 === numSteps? '100%' : spacingBetween}
+              key={i}
+              p='20px'
+              >
+              {steps[step]}
+            </Box>
+    })
   const onlyChild = Children.only(children)
   const animation = cloneElement(onlyChild, {active: activeStep, imgWidth: stickyWidth})
 
@@ -92,9 +106,23 @@ export default function SideScrolly(props) {
         width={`${textColumnWidth*100}%`}
         >
         <Box
-          height={`${bottomOffset*100}vh`}
+          height={title ? `100vh` : `${bottomOffset*100}vh`}
           width={textBoxWidth}
+          fontSize={titleSize}
+          fontFamily={`Castoro`}
+          fontWeight={800}
+          textAlign='center'
+          pt='40vh'
           >
+          {title}
+          <Text
+            fontFamily={`Castoro`}
+            textAlign='center'
+            fontSize='1.25rem'
+            pt='1.25rem'
+            >
+            Scroll down to begin.
+          </Text>
         </Box>
         {boxSteps}
       </Flex>}
@@ -144,7 +172,9 @@ SideScrolly.propTypes = {
   spacingBetween: PropTypes.string,
   right: PropTypes.bool,
   textColumnWidth: PropTypes.number,
-  animationPadding: PropTypes.string
+  animationPadding: PropTypes.string,
+  fontSize: PropTypes.string,
+  titleSize: PropTypes.string
 }
 
 SideScrolly.defaultProps = {
@@ -160,4 +190,6 @@ SideScrolly.defaultProps = {
   right: true,
   textColumnWidth: 0.5,
   animations: '5%',
+  fontSize: '1em',
+  titleSize: '2em'
 }
