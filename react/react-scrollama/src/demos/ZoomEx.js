@@ -4,9 +4,11 @@ import SideScrolly from '../scrolly-components/SideScrolly'
 import Zoom from '../scrolly-components/Zoom'
 import dataViz from './dataviz.jpg'
 import { textSteps, imgSteps } from './imgZoom/content'
+import useWindowSize from '../hooks/useWindowSize'
 
 
 export default function ZoomEx() {
+  const windowSize = useWindowSize()
   return (
     <SideScrolly
       id='main'
@@ -23,7 +25,11 @@ export default function ZoomEx() {
       textBoxColor={'none'}
       textBoxWidth={'100%'}
       >
-      <Zoom steps={imgSteps} src={dataViz} />
+      <Zoom
+        steps={imgSteps}
+        src={dataViz}
+        windowSize={windowSize}
+        />
     </SideScrolly>
   )
 }

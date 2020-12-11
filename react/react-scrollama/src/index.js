@@ -8,6 +8,7 @@ import {
 import reportWebVitals from './reportWebVitals'
 import ColorEx from './demos/ColorEx'
 import ZoomEx from './demos/ZoomEx'
+import Viewer from './scrolly-components/Viewer'
 
 
 ReactDOM.render(
@@ -19,6 +20,9 @@ ReactDOM.render(
         </Route>
         <Route path='/zoom'>
           <ZoomEx />
+        </Route>
+        <Route path='/viewer'>
+          <Viewer />
         </Route>
       </Switch>
     </Router>

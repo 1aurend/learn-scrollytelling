@@ -12,18 +12,33 @@ const TransformHandler = props => {
     active,
     steps,
     el,
+    windowSize,
     children,
+    positionX,
+    setPositionX
   } = props
   const prevX = useRef(0)
   const prevY = useRef(0)
   const prevS = useRef(1)
+  const prevSize = useRef(windowSize)
   const pxFactor = useRef()
+  console.log('x:' + positionX)
 
   useEffect(() => {
+    if (pxFactor.current) {
+      console.log('here')
+      const deltaWidth = windowSize.width - prevSize.current.width
+      prevSize.current = windowSize
+      console.log(deltaWidth)
+      setPositionX(positionX-(deltaWidth*.1), 0)
+      pxFactor.current = el.getBoundingClientRect()
+      console.log(pxFactor.current)
+      return
+    }
     if (el) {
       el.onload = () => {pxFactor.current = el.getBoundingClientRect()}
     }
-  }, [el])
+  }, [el, windowSize, setTransform])
 
   useEffect(() => {
     console.log(active)
@@ -38,6 +53,8 @@ const TransformHandler = props => {
       return {x: xPx, y: yPx}
     }
     const {x, y} = ToPx()
+    console.log(x)
+    console.log(y)
     setTransform(
       x,
       y,
@@ -58,9 +75,11 @@ export default function Zoom(props) {
     src,
     steps,
     active,
-    imgWidth
+    imgWidth,
+    windowSize
   } = props
   const imgRef = useRef()
+  console.log(imgWidth)
 
   return (
     <Box
@@ -69,7 +88,6 @@ export default function Zoom(props) {
       bg='#DE59EB'
       >
       <TransformWrapper
-        defaultScale={1}
         defaultPositionX={0}
         defaultPositionY={0}
         options={{
@@ -82,12 +100,15 @@ export default function Zoom(props) {
         pinch={{disabled: true}}
         doubleClick={{disabled: true}}
         >
-        {({ setTransform, setScale, ...rest }) => (
+        {({ setTransform, setScale, positionX, setPositionX, ...rest }) => (
           <TransformHandler
             setTransform={setTransform}
             active={active}
             steps={steps}
             el={imgRef.current}
+            windowSize={windowSize}
+            positionX={positionX}
+            setPositionX={setPositionX}
             >
             <TransformComponent>
               <img ref={imgRef} src={src} alt="dataviz infographic" style={{width: imgWidth}}/>
