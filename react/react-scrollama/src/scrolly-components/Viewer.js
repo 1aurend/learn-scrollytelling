@@ -7,67 +7,104 @@ import {
   Flex,
   Box,
   Button
-} from 'rebass'
+} from 'theme-ui'
+import useWindowSize from '../hooks/useWindowSize'
+import dataViz from '../demos/dataviz.jpg'
+
+
+const ZoomWrapper = ({children}) => {
+  return (
+    <Box
+      width='fit-content'
+      height='fit-content'
+      m={0}
+      sx={{
+        border: '10px solid #3D4849',
+        zIndex: 10,
+        overflow: 'hidden',
+      }}
+      >
+      {children}
+    </Box>
+  )
+}
+
+const ZoomContent = (props) => {
+  const {
+    translate,
+    scale,
+    transition,
+    children
+  } = props
+  return (
+    <Flex
+      width='fit-content'
+      height='fit-content'
+      m={0}
+      sx={{
+        border: '5px solid #5257F7',
+        transform: `translate(${translate}) scale(${scale})`,
+        transition: transition,
+      }}
+      >
+      {children}
+    </Flex>
+  )
+}
 
 
 export default function Viewer(props) {
+  const {
+    src,
+    steps,
+    active,
+    imgWidth
+  } = props
+  const windowSize = useWindowSize()
   const [translate, setTranslate] = useState(null)
   const [scale, setScale] = useState(null)
   const [transition, setTransition] = useState(null)
+  const prevSize = useRef(windowSize)
+
+  useEffect(() => {
+    if (windowSize.width !== prevSize.current.width ||
+      windowSize.height !== prevSize.current.height) {
+      setTransition(null)
+      prevSize.current = windowSize
+    }
+  }, [windowSize])
 
   const animateTransition = () => {
     setTransition('transform 2s ease-out')
-    setTranslate('10vw, 10vw')
-    setScale(2)
-    setTimeout(() => setTransition(null), 2500)
+    setTranslate(`${-36*8}%, ${32*8}%`)
+    setScale(8)
   }
   const reverseTransition = () => {
     setTransition('transform 2s ease-out')
     setTranslate(0)
     setScale(1)
-    setTimeout(() => setTransition(null), 2500)
   }
+
 
   return (
     <Flex
-      flexDirection='column'
-      justifyContent='center'
-      alignItems='center'
+      sx={{
+        flexDirection:'column',
+        minHeight:'100vh',
+        justifyContent:'center',
+        alignItems:'center',
+      }}
       width='100vw'
-      height='100vh'
       >
-      <Flex
-        width='50vw'
-        height='50vw'
-        justifyContent='center'
-        alignItems='center'
-        sx={{
-          border: '10px solid #3D4849',
-          zIndex: 10,
-          overflow: 'hidden',
-        }}
-        >
-        <Flex
-          bg='#DE59EB'
-          sx={{
-            border: '5px solid #5257F7',
-            transform: `translate(${translate}) scale(${scale})`,
-            transition: transition,
-            flexShrink: 0
-          }}
-          height='60vw'
-          width='60vw'
-          justifyContent='center'
-          alignItems='center'
+      <ZoomWrapper>
+        <ZoomContent
+          translate={translate}
+          scale={scale}
+          transition={transition}
           >
-          <Box
-            bg='white'
-            height='5vw'
-            width='5vw'
-            >
-          </Box>
-        </Flex>
-      </Flex>
+          <img src={dataViz} alt="dataviz infographic" style={{width: '75vw'}}/>
+        </ZoomContent>
+      </ZoomWrapper>
       <Button
         bg='#3D4849'
         m='20px'

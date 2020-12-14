@@ -1,14 +1,13 @@
 import React from 'react'
 import CenterScrolly from '../scrolly-components/CenterScrolly'
 import SideScrolly from '../scrolly-components/SideScrolly'
-import Zoom from '../scrolly-components/Zoom'
+import ControlledZoom from '../scrolly-components/ControlledZoom'
 import dataViz from './dataviz.jpg'
 import { textSteps, imgSteps } from './imgZoom/content'
 import useWindowSize from '../hooks/useWindowSize'
 
 
 export default function ZoomEx() {
-  const windowSize = useWindowSize()
   return (
     <SideScrolly
       id='main'
@@ -25,10 +24,10 @@ export default function ZoomEx() {
       textBoxColor={'none'}
       textBoxWidth={'100%'}
       >
-      <Zoom
+      <ControlledZoom
         steps={imgSteps}
         src={dataViz}
-        windowSize={windowSize}
+        alt="biggest jpg I could find"
         />
     </SideScrolly>
   )

@@ -134,11 +134,22 @@ export default function SideScrolly(props) {
         >
         <Box
           className={`${id}-sticky`}
-          height={stickyHeight}
           width={stickyWidth}
-          sx={{position: 'sticky', top: `${topOffset*100}%`}}
+          height={stickyHeight}
+          sx={{
+            position: 'sticky',
+            top: `${topOffset*100}%`,
+            minHeight: '100vh'
+          }}
           >
-          {animation}
+          <Flex
+            flexDirection='column'
+            justifyContent='center'
+            bg='black'
+            height='100vh'
+            >
+            {animation}
+          </Flex>
         </Box>
       </Flex>
       {!right && <Flex
