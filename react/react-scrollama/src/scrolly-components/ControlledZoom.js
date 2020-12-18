@@ -60,6 +60,7 @@ export default function ControlledZoom(props) {
   const [scale, setScale] = useState(1)
   const [transition, setTransition] = useState(null)
   const prevSize = useRef(windowSize)
+  const img = useRef(null)
 
   useEffect(() => {
     if (windowSize.width !== prevSize.current.width ||
@@ -74,10 +75,22 @@ export default function ControlledZoom(props) {
       return
     }
     const currentStep = steps[active]
+    if (windowSize.height < img.current.height ) {
+      const hidden = (img.current.height-windowSize.height)/img.current.height
+      if (1-currentStep.y < hidden) {
+        const diff = currentStep.y-hidden
+        setTranslate(`${(.5-currentStep.x)*currentStep.s*100}%, ${(((.5-currentStep.y)*currentStep.s)-diff)*100}%`)
+      } else {
+        setTranslate(`${(.5-currentStep.x)*currentStep.s*100}%, ${(.5-currentStep.y)*currentStep.s*100}%`)
+      }
+      setTransition(`transform ${currentStep.d || '2s'} ${currentStep.a || 'ease-out'}`)
+      setScale(currentStep.s)
+      return
+    }
     setTransition(`transform ${currentStep.d || '2s'} ${currentStep.a || 'ease-out'}`)
     setTranslate(`${(.5-currentStep.x)*currentStep.s*100}%, ${(.5-currentStep.y)*currentStep.s*100}%`)
     setScale(currentStep.s)
-  }, [active, steps])
+  }, [active, steps, windowSize])
 
   return (
     <ZoomWrapper>
@@ -86,7 +99,7 @@ export default function ControlledZoom(props) {
         scale={scale}
         transition={transition}
         >
-        <img src={src} alt={alt} style={{width: imgWidth}}/>
+        <img ref={img} src={src} alt={alt} style={{width: imgWidth}}/>
       </ZoomContent>
     </ZoomWrapper>
   )

@@ -75,9 +75,6 @@ export default function SideScrolly(props) {
               bg={textBoxColor}
               sx={{
                 zIndex: 99,
-                '@media screen and (max-width: 64em)': {
-                  fontSize: '.9em'
-                }
               }}
               width={textBoxWidth}
               className={`${id}-step`}

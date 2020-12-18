@@ -7,7 +7,8 @@ import React, {
 import 'intersection-observer'
 import {
   Box,
-  Flex
+  Flex,
+  Text
 } from 'rebass'
 import PropTypes from 'prop-types'
 import createScrollamaTrigger from '../utils/createScrollamaTrigger'
@@ -27,7 +28,9 @@ export default function CenterScrolly(props) {
     maxOpacity,
     textBoxWidth,
     textColor,
-    spacingBetween
+    spacingBetween,
+    fontSize,
+    titleSize
   } = props
   const [activeStep, setActive] = useState(null)
   const numSteps = Object.keys(steps).length
@@ -72,44 +75,81 @@ export default function CenterScrolly(props) {
     createScrollamaTrigger(bottomParams)
   }, [id, bottomOffset, topOffset, maxOpacity, minOpacity])
 
-  const boxSteps = Object.values(steps).map((step, i) => {
-    return <Box
-            bg={`${textBoxColor}${Math.round(opacity[i]*100)}`}
-            sx={{
-              zIndex: 99,
-              '@media screen and (max-width: 64em)': {
-                fontSize: '.9em'
-              }
-            }}
-            width={textBoxWidth}
-            className={`${id}-step`}
-            textAlign='center'
-            color={textColor}
-            fontSize='1em'
-            m='10%'
-            mb={spacingBetween}
-            key={i}
-            p='20px'
-            >
-            {step}
-          </Box>
-  })
+  const title = steps.title ? steps.title : null
+  const boxSteps = Object.keys(steps)
+    .filter(step => step !== 'title')
+    .map((step, i) => {
+      return <Box
+              bg={`${textBoxColor}FF`}
+              sx={{
+                zIndex: 99,
+              }}
+              width={textBoxWidth}
+              className={`${id}-step`}
+              textAlign='center'
+              color={textColor}
+              fontSize={fontSize}
+              fontFamily={`Castoro`}
+              m='10%'
+              mb={spacingBetween}
+              key={i}
+              p='20px'
+              >
+              {steps[step]}
+            </Box>
+    })
   const onlyChild = Children.only(children)
-  const animation = cloneElement(onlyChild, {active: activeStep})
+  const animation = cloneElement(onlyChild, {active: activeStep, imgWidth: stickyWidth})
 
   return (
     <Flex
       flexDirection='column'
       alignItems='center'
-      p='10%'
+      p={0}
       >
       <Box
         className={`${id}-sticky`}
-        height={stickyHeight}
         width={stickyWidth}
-        sx={{position: 'sticky', top: `${topOffset*100}%`}}
+        sx={{
+          position: 'sticky',
+          top: `${topOffset*100}%`,
+        }}
         >
-        {animation}
+        <Flex
+          flexDirection='column'
+          justifyContent='center'
+          bg='black'
+          height='100vh'
+          >
+          {animation}
+        </Flex>
+      </Box>
+      <Box
+        height={title ? `100vh` : `${bottomOffset*100}vh`}
+        pt='40vh'
+        sx={{
+          zIndex: 99,
+        }}
+        >
+        <Box
+          width={textBoxWidth}
+          fontSize={titleSize}
+          fontFamily={`Castoro`}
+          fontWeight={800}
+          textAlign='center'
+          bg={`${textBoxColor}FF`}
+          p='20px'
+          >
+          {title}
+        </Box>
+        <Text
+          fontFamily={`Castoro`}
+          textAlign='center'
+          fontSize='1.25rem'
+          pt='1.25rem'
+          >
+          Scroll down to begin.
+        </Text>
       </Box>
       {boxSteps}
       <Box
@@ -134,7 +174,9 @@ CenterScrolly.propTypes = {
   maxOpacity: PropTypes.number,
   textBoxWidth: PropTypes.string,
   textColor: PropTypes.string,
-  spacingBetween: PropTypes.string
+  spacingBetween: PropTypes.string,
+  fontSize: PropTypes.string,
+  titleSize: PropTypes.string
 }
 
 CenterScrolly.defaultProps = {
@@ -148,5 +190,7 @@ CenterScrolly.defaultProps = {
   maxOpacity: 0.9,
   textBoxWidth: '40%',
   textColor: 'black',
-  spacingBetween: '40%'
+  spacingBetween: '40%',
+  fontSize: '1em',
+  titleSize: '2em'
 }
