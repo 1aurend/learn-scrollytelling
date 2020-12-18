@@ -124,15 +124,18 @@ export default function CenterScrolly(props) {
           {animation}
         </Flex>
       </Box>
-      <Box
+      <Flex
         height={title ? `100vh` : `${bottomOffset*100}vh`}
-        pt='40vh'
         sx={{
           zIndex: 99,
+          top: '-60vh',
+          position: 'relative'
         }}
+        justifyContent='center'
         >
         <Box
-          width={textBoxWidth}
+          width='60vw'
+          height='fit-content'
           fontSize={titleSize}
           fontFamily={`Castoro`}
           fontWeight={800}
@@ -141,16 +144,16 @@ export default function CenterScrolly(props) {
           p='20px'
           >
           {title}
+          <Text
+            fontFamily={`Castoro`}
+            textAlign='center'
+            fontSize='1.25rem'
+            pt='1.25rem'
+            >
+            Scroll down to begin.
+          </Text>
         </Box>
-        <Text
-          fontFamily={`Castoro`}
-          textAlign='center'
-          fontSize='1.25rem'
-          pt='1.25rem'
-          >
-          Scroll down to begin.
-        </Text>
-      </Box>
+      </Flex>
       {boxSteps}
       <Box
         height={`${topOffset*150}vh`}
